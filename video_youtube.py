@@ -6,12 +6,7 @@ import numpy as np
 import onnxruntime as ort
 from vidgear.gears import CamGear
 
-from image_util import *
-
-from yolov8_utils import (
-    post_process,
-    non_max_suppression,
-)
+from yolov8_utils import *
 
 # -------------------------------------------------
 # NPU / ONNX Runtime setup
@@ -21,16 +16,15 @@ print(ort.get_available_providers())
 pwd = Path(__file__).resolve().parent
 model = "yolov8m.onnx"
 providers = ["VitisAIExecutionProvider"]
-config = pwd / "vaip_config.json"
 xclbin_file = pwd / "4x4.xclbin"
 provider_options = [{
-    "config_file": config,
     "target": "X1",
     "xclbin": xclbin_file,
     'cache_dir': str(pwd),
     'cache_key': 'compiled_yolov8m',
     'enable_cache_file_io_in_mem': 0
 }]
+
 
 print("Creating ONNX Runtime session...")
 npu_session = ort.InferenceSession(
