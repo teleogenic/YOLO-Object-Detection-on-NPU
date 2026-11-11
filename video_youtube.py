@@ -41,28 +41,35 @@ with open("coco.names", "r") as f:
     names = f.read().splitlines()
 
 # -------------------------------------------------
-# YouTube stream
+# Video stream
 # -------------------------------------------------
-parser = argparse.ArgumentParser(description="YOLOv8 NPU YouTube inference")
+parser = argparse.ArgumentParser(description="YOLOv8 NPU video inference")
 parser.add_argument(
     "--url",
     type = str,
-    default ="https://www.youtube.com/watch?v=SeRUThVhlc4",
-    help ="YouTube video URL"
+    required=True,
+    help ="Video URL"
 )
 args = parser.parse_args()
-youtube_url = args.url
+source = args.url
+
+youtube_domains = (
+    "youtube.com",
+    "youtu.be",
+)
+is_youtube = any(domain in source.lower()
+                 for domain in youtube_domains)
 
 stream = CamGear(
-    source=youtube_url,
-    stream_mode=True,
+    source=source,
+    stream_mode=is_youtube,
     logging=False
 ).start()
 
 # -------------------------------------------------
 # Main loop
 # -------------------------------------------------
-print("Running YOLOv8 on YouTube stream")
+print("Running YOLOv8 on stream")
 frame = stream.read()
 print("Frame shape:", frame.shape)  # (H, W, C)
 
