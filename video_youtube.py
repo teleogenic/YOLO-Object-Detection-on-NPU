@@ -47,7 +47,7 @@ parser = argparse.ArgumentParser(description="YOLOv8 NPU video inference")
 parser.add_argument(
     "--url",
     type = str,
-    required=True,
+    default ="http://192.168.1.23:8989",
     help ="Video URL"
 )
 args = parser.parse_args()
